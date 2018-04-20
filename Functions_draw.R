@@ -1,11 +1,20 @@
+### Code to plot function drawn from a Gaussian Process with mean zero and squared exponential covariance function
 
+# Required libraries:
 library(MASS)
 library(ggplot2)
 library(reshape)
 library(dplyr)
+
+# Squared exponential covariance function:
 RBF <- function(xi,xj){
   exp(-.5*(xi-xj)^2)
 }
+
+# Function for drawing prior functions from the prior
+## priors_No is the number of functions to draw
+## mean is a logical parameter to check wheter the mean of the draws is shown
+
 plot_priors <- function(priors_No,mean){
 set.seed(116687)
   X_vec <- seq(from=-5,to=5,length.out=100)
@@ -33,7 +42,12 @@ set.seed(116687)
 
 
 
-
+# Function for plotting functions drawn from the posterior
+## post_No is the number of functions to draw
+## X_obs is the values of x for which there are observations
+# s2 is the variance of the error distribution 
+        #if s2=0 the observations are noise-less, s2>0 the functions will be shown as points instead of lines
+## Note: the true function is sin(-X_obs)+cos(-X_obs) 
 plot_posterior <- function(post_No,X_obs,s2){
   set.seed(116687)
   X_vec <- seq(from=-5,to=5,by=.1)
@@ -77,12 +91,13 @@ plot_posterior <- function(post_No,X_obs,s2){
 # Draws functions from prior
 plot_priors(priors_No=3,mean=F)
 plot_priors(priors_No=100,mean=T)
+# Draws the covariance between f(0) and f(x)
 xseq <- seq(from=-5,to=5,length.out=100)
 data.frame(X=xseq,Cov=RBF(0,xseq)) %>% ggplot(.,aes(x=X,y=Cov)) + geom_line() + ylab(expression(Cov(f(0),f(x)))) +
   theme(plot.title = element_text(hjust = 0.5),legend.position="none") + ggtitle(expression(paste('Covariance Decay Around ',x=0)))
 
 
-
+# Draws functions from posterior:
 # Noise-free observations
 s2=0
 plot_posterior(post_No=30,X_obs = c(-.5),s2)
