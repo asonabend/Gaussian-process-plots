@@ -77,12 +77,12 @@ plot_posterior <- function(post_No,X_obs,s2){
   if (s2 == 0){
     ggplot(functions_posterior,aes(x=X,y=value,color=Function)) + geom_line() +
       stat_summary(fun.y = "mean", colour = "red", size = 1.5, geom = "point") +
-      theme(plot.title = element_text(hjust = 0.5),legend.position="none") + ggtitle('Posterior Distribution Draws') +
+      theme(plot.title = element_text(hjust = 0.5),legend.position="none") + ggtitle('Posterior Distribution Draws (noise-free obs.)') +
       geom_point(data=data.frame(X=X_obs,y=y_true), aes(x=X, y=y), colour="black", size=3) + ylab('f')
   } else {
     ggplot(functions_posterior,aes(x=X,y=value,color=Function)) + geom_point() +
       stat_summary(fun.y = "mean", colour = "red", size = 3, geom = "point") +
-      theme(plot.title = element_text(hjust = 0.5),legend.position="none") + ggtitle('Posterior Distribution Draws') +
+      theme(plot.title = element_text(hjust = 0.5),legend.position="none") + ggtitle('Posterior Distribution Draws (noisy obs.)') +
       geom_line(data=data.frame(X=X_vec,y=sin(-X_vec)+cos(-X_vec)), aes(x=X, y=y), colour="black", size=1) + ylab('f') +
       geom_point(data=data.frame(X=X_obs,y=y_obs), aes(x=X, y=y), colour="black", size=3)
   }
